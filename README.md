@@ -1,2 +1,2 @@
-sharecam.frb-web
+sharecam.frb-server
 ================
