@@ -14,5 +14,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tlkuo/sharecam.frb-server/issues"
+  },
+  "dependencies": {
+    "express": "~3.4.7"
   }
 }
