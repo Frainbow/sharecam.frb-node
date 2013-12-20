@@ -54,7 +54,7 @@ var device_server = net.createServer(function (device_conn) {
 
         console.log('device ' + device_id + ' ' + device_request.url);
 
-        var device_param = querystring.parse(device_request.body.toString());
+        var device_param = querystring.parse(device_request.body.toString().trim());
 
         if (device_request.method == 'POST' &&
             url.parse(device_request.url).pathname == '/device/connect' &&
@@ -118,7 +118,7 @@ var device_server = net.createServer(function (device_conn) {
                         return;
                     }
 
-                    var client_param = querystring.parse(client_request.body.toString());
+                    var client_param = querystring.parse(client_request.body.toString().trim());
 
                     console.log('client ' + [device_id, client_id].join(':') + ' ' + client_request.url);
 
