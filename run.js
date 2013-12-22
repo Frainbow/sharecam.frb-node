@@ -155,6 +155,10 @@ var device_server = net.createServer(function (device_conn) {
                     }
                 });
 
+                client_conn.on('error', function (error) {
+                    console.log(error);
+                });
+
                 client_conn.on('close', function (had_error) {
                     console.log('client ' + [device_id, client_id].join(':') + ' disconnected');
 
@@ -181,6 +185,10 @@ var device_server = net.createServer(function (device_conn) {
         device_conn.write('Content-Length: 0\r\n\r\n');
         device_request = {};
         return;
+    });
+
+    device_conn.on('error', function (error) {
+        console.log(error);
     });
 
     device_conn.on('close', function (had_error) {
