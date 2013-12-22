@@ -162,7 +162,7 @@ var device_server = net.createServer(function (device_conn) {
                 });
             });
 
-            client_server.listen(function () {
+            client_server.listen(0, '127.0.0.1', function () {
                 var port = String(client_server.address().port);
 
                 console.log('client server listening on port ' + port + ' for device ' + device_id);
