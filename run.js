@@ -69,6 +69,7 @@ var device_server = net.createServer(function (device_conn) {
                 var authorized = false;
                 var client_request = {};
                 var client_id = client_sockets.length;
+                var client_hook;
 
                 client_sockets.push(client_conn);
 
@@ -148,7 +149,7 @@ var device_server = net.createServer(function (device_conn) {
                     return;
                 });
 
-                device_conn.on('data', function (data) {
+                device_conn.on('data', client_hook = function (data) {
                     if (authorized) {
                         client_conn.write(data);
                         return;
@@ -163,6 +164,7 @@ var device_server = net.createServer(function (device_conn) {
                     console.log('client ' + [device_id, client_id].join(':') + ' disconnected');
 
                     client_sockets[client_id] = false;
+                    device_conn.removeListener('data', client_hook);
                 });
             });
 
