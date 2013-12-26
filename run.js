@@ -2,14 +2,12 @@ var net = require('net');
 var url = require('url');
 var querystring = require('querystring');
 
-var device_sockets = [];
+var device_counter = 0;
 var device_server = net.createServer(function (device_conn) {
     var client_server;
     var client_sockets = [];
     var device_request = {};
-    var device_id = device_sockets.length;
-
-    device_sockets.push(device_conn);
+    var device_id = ++device_counter;
 
     console.log('device ' + device_id + ' connected');
 
@@ -195,8 +193,6 @@ var device_server = net.createServer(function (device_conn) {
 
     device_conn.on('close', function (had_error) {
         console.log('device ' + device_id + ' disconnected');
-
-        device_sockets[device_id] = false;
 
         for (var i = 0; i < client_sockets.length; i++) {
             if (client_sockets[i])
