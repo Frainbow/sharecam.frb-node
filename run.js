@@ -4,7 +4,7 @@ var querystring = require('querystring');
 
 var device_sockets = [];
 var device_server = net.createServer(function (device_conn) {
-
+    var client_server;
     var client_sockets = [];
     var device_request = {};
     var device_id = device_sockets.length;
@@ -64,7 +64,7 @@ var device_server = net.createServer(function (device_conn) {
 
             var device_auth = device_param;
 
-            var client_server = net.createServer(function (client_conn) {
+            client_server = net.createServer(function (client_conn) {
 
                 var authorized = false;
                 var client_request = {};
@@ -202,6 +202,9 @@ var device_server = net.createServer(function (device_conn) {
             if (client_sockets[i])
                 client_sockets[i].destroy();
         }
+
+        if (client_server)
+            client_server.close();
     });
 });
 
