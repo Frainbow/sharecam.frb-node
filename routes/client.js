@@ -18,7 +18,7 @@ exports.action = function (req, res) {
         res.send(500);
     });
 
-    device.setTimeout(10 * 1000, function () {
+    device.setTimeout(5 * 1000, function () {
         if (res.connection)
             res.connection.end();
         device.end();
