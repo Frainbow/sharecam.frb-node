@@ -4,13 +4,38 @@ var querystring = require('querystring');
 exports.action = function (req, res) {
     var id = req.query.id;
     var action = req.params.action;
+    var username = req.session.username;
+    var password = req.session.password;
+    var authorize = false;
 
     var device = net.connect({ host: '127.0.0.1', port: id }, function () {
-        device.write('GET /client/' + action + ' HTTP/1.1\r\n\r\n');
+        var req_body = querystring.stringify({ username: username, password: password });
+
+        device.write('POST /client/authorize  HTTP/1.1\r\n');
+        device.write('Content-Length: ' + req_body.length + '\r\n\r\n');
+        device.write(req_body);
     });
 
+    var res_data = '';
+
     device.on('data', function (data) {
-        if (res.connection) {
+        var m, res_code = 500;
+
+        if (!authorize) {
+            res_data += data.toString();
+
+            if (m = res_data.match(/^HTTP\/1.1 (\d+) .*\r\n(.*\r\n)+\r\n$/)) {
+                res_code = parseInt(m[1]);
+
+                if (res_code == 200) {
+                    authorize = true;
+                    device.write('GET /client/' + action + ' HTTP/1.1\r\n\r\n');
+                    return;
+                }
+
+                res.send(res_code);
+            }
+        } else if (res.connection) {
             res.connection.write(data);
         }
     });
